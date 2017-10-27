@@ -12,7 +12,7 @@ from .prediction_algorithms import SVDpp
 from .prediction_algorithms import NMF
 from .prediction_algorithms import SlopeOne
 from .prediction_algorithms import CoClustering
-
+from .prediction_algorithms import SVDWeighted
 from .prediction_algorithms import PredictionImpossible
 from .prediction_algorithms import Prediction
 
@@ -28,6 +28,6 @@ __all__ = ['AlgoBase', 'NormalPredictor', 'BaselineOnly', 'KNNBasic',
            'KNNWithMeans', 'KNNBaseline', 'SVD', 'SVDpp', 'NMF', 'SlopeOne',
            'CoClustering', 'PredictionImpossible', 'Prediction', 'Dataset',
            'Reader', 'Trainset', 'evaluate', 'print_perf', 'GridSearch',
-           'dump', 'KNNWithZScore']
+           'dump', 'KNNWithZScore', 'SVDWeighted']
 
 __version__ = get_distribution('scikit-surprise').version
