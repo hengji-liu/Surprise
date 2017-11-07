@@ -12,7 +12,7 @@ from six.moves import range
 
 from .algo_base import AlgoBase
 from .predictions import PredictionImpossible
-
+import surprise.svdweights as svdweights
 
 class SVDWeighted(AlgoBase):
     """The famous *SVD* algorithm, as popularized by `Simon Funk
@@ -111,8 +111,10 @@ class SVDWeighted(AlgoBase):
                  init_std_dev=.1, lr_all=.005,
                  reg_all=.02, lr_bu=None, lr_bi=None, lr_pu=None, lr_qi=None,
                  reg_bu=None, reg_bi=None, reg_pu=None, reg_qi=None,
-                 weights=None,
+                 weights_func=None,
                  verbose=False):
+
+        chosen_func = getattr(svdweights, weights_func)
 
         self.n_factors = n_factors
         self.n_epochs = n_epochs
@@ -127,7 +129,7 @@ class SVDWeighted(AlgoBase):
         self.reg_bi = reg_bi if reg_bi is not None else reg_all
         self.reg_pu = reg_pu if reg_pu is not None else reg_all
         self.reg_qi = reg_qi if reg_qi is not None else reg_all
-        self.wi = weights
+        self.weights_func = chosen_func
         self.verbose = verbose
 
         AlgoBase.__init__(self)
@@ -180,7 +182,8 @@ class SVDWeighted(AlgoBase):
         # item factors
         cdef np.ndarray[np.double_t, ndim=2] qi
         # weight
-        cdef np.ndarray[np.int_t] wi = np.asarray(self.wi)
+        cdef np.ndarray[np.int_t] wi = np.asarray(self.weights_func(trainset))
+        # print(wi)
 
         cdef int u, i, f
         cdef double r, err, dot, puf, qif
